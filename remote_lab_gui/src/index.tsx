@@ -10,14 +10,34 @@ import "rsuite/dist/rsuite.min.css";
 
 import "tailwindcss/tailwind.css";
 
+import {
+  createBrowserRouter,
+  createRoutesFromElements,
+  Route,
+  RouterProvider,
+} from "react-router-dom";
+import RequireAuth from './Auth/requireAuth';
+import Auth from './Auth';
 
+
+const router = createBrowserRouter(
+  createRoutesFromElements(
+    <Route path="/*" element={<RequireAuth>
+      <App />
+    </RequireAuth>}>
+
+    </Route>
+  )
+);
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
   <React.StrictMode>
-    <App />
+    <React.StrictMode>
+      <RouterProvider router={router} />
+    </React.StrictMode>
   </React.StrictMode>
 );
 
