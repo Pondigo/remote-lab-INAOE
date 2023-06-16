@@ -8,6 +8,8 @@ import mosfetIcon from './icons/mosfet-icon.png'
 import nandIcon from './icons/nand-icon.png'
 import solarCellIcon from './icons/solar-cell.png'
 import axios from "axios";
+import MosfetPage from "./MosfetPage";
+import NandPage from "./NandPage";
 
 //Get API_URL from .env
 const API_URL = process.env.REACT_APP_API_URL;
@@ -21,6 +23,10 @@ const getTitleFromPath = (path: string) => {
       return "Menu";
     case "/solarCell":
       return "Celda Solar";
+    case "/mosfet":
+      return "MOSFET";
+    case "/nand":
+      return "NAND";  
     default:
       return "";
   }
@@ -73,7 +79,9 @@ export default function App() {
                     </button>
                   </div>
                   <div className="w-full sm:w-1/2 md:w-1/3 lg:w-1/3 xl:w-1/3 p-4">
-                    <button className="w-full h-full bg-inaoe_comp3 hover:bg-opacity-80 text-center font-bold rounded-lg flex flex-col relative">
+                    <button 
+                    onClick={() => navigate("/mosfet")}
+                    className="w-full h-full bg-inaoe_comp3 hover:bg-opacity-80 text-center font-bold rounded-lg flex flex-col relative">
                       <span className="flex-1 flex items-center justify-center text-white text-xl flex-col gap-y-10">
                         MOSFET
                         <img
@@ -87,7 +95,7 @@ export default function App() {
 
                   <div className="w-full sm:w-1/2 md:w-1/3 lg:w-1/3 xl:w-1/3 p-4">
                     <button
-                      onClick={fetchLogicGate}
+                      onClick={()=>{navigate("/nand")}}
                       className="w-full h-full bg-inaoec1 hover:bg-opacity-80 text-center font-bold rounded-lg flex flex-col"
                     >
                       <span className="flex-1 flex items-center justify-center text-white text-xl flex-col gap-y-10">
@@ -102,7 +110,9 @@ export default function App() {
           }
         />
         <Route path="/solarCell" element={<SolarCellPage />} />
-        <Route path="/*" element={<div>Not found</div>} />
+        <Route path="/mosfet" element={<MosfetPage/>} />
+        <Route path="/nand" element={<NandPage/>} />
+        <Route path="/*" element={<div className="w-screen text-center h-screen ">Not found</div>} />
       </Routes>
     </>
   );

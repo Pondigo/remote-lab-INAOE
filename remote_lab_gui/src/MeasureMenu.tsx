@@ -32,29 +32,21 @@ function MeasureMenu(props: {
     
 
   return (
-    <div className="relative bg-gray-400 bg-opacity-25 rounded-lg p-5 ">
-      <form className="flex flex-col" onSubmit={handleSubmit}>
-        <button
-          type="submit"
-          className="bg-inaoe text-white border-none rounded-md p-2 flex items-center justify-center"
-        >
-          Obtener datos
-        </button>
-      </form>
+    <div className="mx-10 px-10 rounded-lg p-5 ">
       <br />
       <form className="flex flex-col" onSubmit={handleGenData}>
         <button
           type="submit"
-          className="bg-inaoe text-white border-none rounded-md p-2 flex items-center justify-center"
+          className="bg-inaoe text-white border-none rounded-md p-2 text-xs flex items-center justify-center"
         >
-          Generar datos
+          Copiar datos
         </button>
       </form>
       <br />
       <form className="flex flex-col" onSubmit={handleDownload}>
         <button
           type="submit"
-          className="bg-inaoe text-white border-none rounded-md p-2 flex items-center justify-center"
+          className="bg-inaoe text-white border-none rounded-md p-2 text-xs flex items-center justify-center"
         >
           Descargar datos
         </button>

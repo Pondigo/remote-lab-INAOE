@@ -1,5 +1,5 @@
 {
-  "name": "briefcase_nora",
+  "name": "remotelab",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -12,11 +12,13 @@
     "@types/react-dom": "^18.0.1",
     "axios": "^1.3.5",
     "chart.js": "^4.2.1",
+    "chartjs-plugin-zoom": "^2.0.1",
     "i18next": "^21.9.1",
     "react": "^18.0.0",
     "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.0.0",
     "react-i18next": "^11.18.4",
+    "react-katex": "^3.0.1",
     "react-router-dom": "^6.10.0",
     "react-scripts": "5.0.1",
     "rsuite": "^5.16.6",
@@ -50,6 +52,7 @@
     ]
   },
   "devDependencies": {
+    "@types/react-katex": "^3.0.0",
     "autoprefixer": "^10.4.8",
     "gh-pages": "^4.0.0",
     "postcss": "^8.4.16",

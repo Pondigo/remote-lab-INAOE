@@ -15,6 +15,7 @@ import {
   Scale,
 } from "chart.js";
 import InputField from "./Layout/InputField";
+import ComputeSCparams from "./ComputeSCparams";
 
 ChartJS.register(
   CategoryScale,
@@ -46,6 +47,34 @@ export const getRandomNumber = (min: number, max: number) =>
       URL.revokeObjectURL(url);
   }
 
+function getDatContent(
+  Voltage: number[],
+  Current: number[],
+  Power: number[]
+): string {
+  let datContent = `# Datos celda solar\n`;
+  datContent += `Voltaje: ${Voltage.join(",")}\n`;
+  datContent += `Corriente: ${Current.join(",")}\n`;
+  datContent += `Potencia: ${Power.join(",")}\n`;
+  return datContent;
+}
+
+const downloadTabDat = (voltaje: number[], corriente: number[], potencia: number[]) => {
+  let result = "Voltaje\tCorriente\tPotencia\n";
+  for (let i = 0; i < voltaje.length; i++) {
+    result += voltaje[i] + "\t" + corriente[i] + "\t" + potencia[i] + "\n";
+  }
+  const blob = new Blob([result], { type: "text/tab-separated-values" });
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "SolarCellData.dat";
+  a.click();
+
+  URL.revokeObjectURL(url);
+};
+
 export const SolarCellPage = () => {
   const [labels, setLabels] = useState<number[]>(
     Array.from({ length: 100 }, (_, i) => i / 10)
@@ -67,30 +96,19 @@ export const SolarCellPage = () => {
   };
 
   //Get the data from the API
-  const getData = () => {
+  const getData = (vstart:number, vend: number, step: number) => {
     //Get API_URL + /solarCell/curveIV and extract from the response the data x and y
-    fetch(API_URL + "/solarCell/curveIV").then((response) => {
-      response.json().then((data) => {
-        console.log("data");
+    //With vstart, vend and step as parameters
+    fetch(
+      `${API_URL}/remote_lab/solar_cell/curveIV?vstart=${vstart}&vend=${vend}&step=${step}`
+    )
+      .then((response) => response.json())
+      .then((data) => {
         console.log(data);
-
-        //Extract newLabels and newData from the response as floats
-        const newLabel: number[] = data.x.map((x: any) => parseFloat(x));
-        const newData: number[] = data.y.map((y: any) => parseFloat(y));
-
-        console.log("newLabel");
-        console.log(newLabel);
-        console.log("newData");
-        console.log(newData);
-
-        //Multiply newData by newLabel
-        const multipliedData = newData.map((y, i) => y * newLabel[i]);
-
-        setLabels(newLabel);
-        setDataTest(newData);
-        setDataTest2(multipliedData);
+        setLabels(data.x);
+        setDataTest(data.y);
+        setDataTest2(data.y.map((x: number, i: number) => x * data.x[i]));
       });
-    });
   };
   const data: ChartData<"line", number[]> = {
     labels,
@@ -106,8 +124,8 @@ export const SolarCellPage = () => {
         fill: false,
         label: "Potencia (W)",
         data: dataTest2,
-        borderColor: "rgb(53, 162, 235)",
-        backgroundColor: "rgba(53, 162, 235, 0.5)",
+        borderColor: "rgb(128, 0, 128, 0.5)",
+        backgroundColor: "rgba(128, 0, 128, 0.5)",
       },
     ],
   };
@@ -137,12 +155,12 @@ export const SolarCellPage = () => {
           callback: function (value: any, index: number, values: any) {
             //Get label from the index
             const label: number = labels[index];
-            console.log("label");
+        /*     console.log("label");
             console.log(label);
             console.log("value");
-            console.log(value);
+            console.log(value); */
 
-            return value % 10 === 0 ? label + "" : "";
+            return value % 10 === 0 ? label.toFixed(2) : "";
           },
         },
       },
@@ -155,19 +173,68 @@ export const SolarCellPage = () => {
     },
   };
   return (
-    <div className="pt-5 overflow-x-hidden overflow-y-auto pb-5 absolute w-screen h-screen  bg-[conic-gradient(at_right,_var(--tw-gradient-stops))] from-gray-100 to-gray-300">
-     
+    <div className="overflow-x-hidden overflow-y-auto absolute w-screen w-100 bg-[conic-gradient(at_right,_var(--tw-gradient-stops))] from-gray-100 to-gray-300">
       <div className="flex flex-row w-screen">
-        <div className="w-screen">
+        <div className="w-3/5">
           <Line data={data} options={options} redraw />
         </div>
-        <div className="w-80 flex items-center justify-center">
-          {/* <MeasureMenu
-            getData={getData}
-            genData={generateData}
-            downloadData={downloadData} /> */}
+        <div className="w-2/5 ml-10">
+          <InputField getData ={getData}/>
+        </div>
+      </div>
+      <div className="flex flex-row w-screen">
+        <div className="w-3/5 h-1/5 flex justify-evenly">
+          <ComputeSCparams />
+        </div>
+        <div className="w-2/5 h-1/5">
+          <MeasureMenu
+            getData={function (): void {
+              const datContent = getDatContent(
+                labels,
+                dataTest,
+                dataTest2
+              );
+              //Copy the content to the clipboard
+              navigator.clipboard.writeText(datContent);
+              //Show a message
+              alert("Datos copiados al portapapeles");
+            }}
+            genData={function (): void {
+                 const datContent = getDatContent(labels, dataTest, dataTest2);
+                 //Copy the content to the clipboard
+                 navigator.clipboard.writeText(datContent);
+                 //Show a message
+                 alert("Datos copiados al portapapeles");
+            }}
+            downloadData={function (): void {
+              /* //Generate the content of the dat file
+              const datContent = getDatContent( 
+                labels,
+                dataTest,
+                dataTest2
+              );
+              //Create a blob with the content
+              const blob = new Blob([datContent], { type: "text/plain" });
+              //Create a URL with the blob
+              const url = URL.createObjectURL(blob);
 
-            <InputField />
+              //Create a link element
+              const a = document.createElement("a");
+
+              //Set the link element href to the URL
+              a.href = url;
+              //Set the link element download to the filename
+              a.download = "Datos.dat";
+              //Simulate a click on the link element
+              a.click();
+
+              //Revoke the URL to avoid memory leaks
+              URL.revokeObjectURL(url); */
+
+              downloadTabDat(labels, dataTest, dataTest2);
+
+            }}
+          />
         </div>
       </div>
     </div>

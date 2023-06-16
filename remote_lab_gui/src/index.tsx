@@ -32,7 +32,16 @@ const router = createBrowserRouter(
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
+  //Add class to root element
 );
+
+document
+  .getElementById("root")
+  ?.classList.add(
+    "bg-[conic-gradient(at_right,_var(--tw-gradient-stops))]", "from-gray-100", "to-gray-300", "h-screen", "w-screen"
+  );
+
+
 root.render(
   <React.StrictMode>
     <React.StrictMode>

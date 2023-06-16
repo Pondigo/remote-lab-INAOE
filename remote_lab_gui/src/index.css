@@ -32,45 +32,25 @@
   background-color: #232c3b;
 }
 
-::-webkit-scrollbar {
-  width: 7px;
-  height: 7px;
+
+/* ===== Scrollbar CSS ===== */
+/* Firefox */
+* {
+  scrollbar-width: auto;
+  scrollbar-color: #271970 transparent;
 }
 
-::-webkit-scrollbar-button {
-  width: 0px;
-  height: 0px;
+/* Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+  width: 10px;
 }
 
-::-webkit-scrollbar-thumb {
-  background: #74475c;
-  border: 0px none #ffffff;
-  border-radius: 50px;
+*::-webkit-scrollbar-track {
+  background: #ffffff26;
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: #723f57;
-}
-
-::-webkit-scrollbar-thumb:active {
-  background: #51303f;
-}
-
-::-webkit-scrollbar-track {
-  background: #666666;
-  border: 0px none #ffffff;
-}
-
-::-webkit-scrollbar-track:hover {
-  background: #666666;
-}
-
-::-webkit-scrollbar-track:active {
-  background: #666666;
-}
-
-::-webkit-scrollbar-corner {
-  background: transparent;
+*::-webkit-scrollbar-thumb {
+  background-color: #271970;
 }
 
 .rs-popover-content {
