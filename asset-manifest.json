@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/remote-lab-INAOE/static/css/main.6e588439.css",
-    "main.js": "/remote-lab-INAOE/static/js/main.84026110.js",
+    "main.js": "/remote-lab-INAOE/static/js/main.1ab1275a.js",
     "static/js/787.23b533cb.chunk.js": "/remote-lab-INAOE/static/js/787.23b533cb.chunk.js",
     "static/media/KaTeX_AMS-Regular.ttf": "/remote-lab-INAOE/static/media/KaTeX_AMS-Regular.853be92419a6c3766b9a.ttf",
     "static/media/KaTeX_Main-Regular.ttf": "/remote-lab-INAOE/static/media/KaTeX_Main-Regular.9eba1d77abcf2aa6e94e.ttf",
@@ -68,11 +68,11 @@
     "index.html": "/remote-lab-INAOE/index.html",
     "static/media/logout-icon.svg": "/remote-lab-INAOE/static/media/logout-icon.8d248a942166fbbae74cbe89ffb3c98e.svg",
     "main.6e588439.css.map": "/remote-lab-INAOE/static/css/main.6e588439.css.map",
-    "main.84026110.js.map": "/remote-lab-INAOE/static/js/main.84026110.js.map",
+    "main.1ab1275a.js.map": "/remote-lab-INAOE/static/js/main.1ab1275a.js.map",
     "787.23b533cb.chunk.js.map": "/remote-lab-INAOE/static/js/787.23b533cb.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.6e588439.css",
-    "static/js/main.84026110.js"
+    "static/js/main.1ab1275a.js"
   ]
 }
