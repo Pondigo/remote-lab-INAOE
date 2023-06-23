@@ -1,6 +1,6 @@
 import { ChartData } from "chart.js";
 import { Line } from "react-chartjs-2";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Header from "./Header";
 import MeasureMenu from "./MeasureMenu";
 import {
@@ -18,8 +18,8 @@ import InputField from "./Layout/InputField";
 import ComputeSCparams from "./ComputeSCparams";
 import ComputeMosParams from "./ComputeMosParams";
 import InputFieldMos from "./Layout/InputFieldMos";
-import ChartZoomPlugin, {zoom} from "chartjs-plugin-zoom";
-
+import zoomPlugin from "chartjs-plugin-zoom";
+import Hammer from "hammerjs";
 
 
 ChartJS.register(
@@ -30,7 +30,7 @@ ChartJS.register(
   Title,
   Tooltip,
   Legend,
-  ChartZoomPlugin
+  zoomPlugin
 );
 //ChartJS.pluginService.register(ChartZoomPlugin);
 
@@ -84,7 +84,7 @@ export default () => {
   const [dataTest, setDataTest] = useState<number[]>(labels.map((x) => 0));
   const [dataTest2, setDataTest2] = useState<number[]>(labels.map((x) => 0));
 
-  
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   //Get the data from the API
   const getData = (
@@ -93,6 +93,9 @@ export default () => {
     step: number,
     fixedVoltaje: number
   ) => {
+    setIsLoading(!isLoading)
+    return;
+    
     //Get `${API_URL}/remote_lab/mosfet/curveIV` with
     fetch(
       API_URL +
@@ -144,6 +147,8 @@ export default () => {
   };
 
 
+
+
   const options = {
     responsive: true,
     plugins: {
@@ -154,7 +159,24 @@ export default () => {
         display: true,
         text: "Curva caracteristica de MOSFET",
       },
-
+       zoom: {
+        zoom: {
+          wheel: {
+            enabled: true
+          },
+          // drag:{
+          //   enabled:true
+          // },
+          mode: "xy" as "xy",
+          speed: 100
+        },
+        pan: {
+          enabled: true,
+          mode: "xy" as "xy",
+          speed: 0.5
+        }
+      }
+      
     },
     scales: {
       x: {
@@ -180,8 +202,29 @@ export default () => {
           text: "Corriente (A)",
         },
       },
+    }
+  /*   pan: {
+      enabled: true,
+      mode: "xy",
+      speed: 10,
+
     },
+    zoom: {
+      enabled: true,
+      drag: false,
+      mode: "xy",
+      rangeMin: {
+        x: 0,
+        y: 0,
+      },
+      rangeMax: {
+        x: 100,
+        y: 100,
+      },
+
+    }, */
   };
+
 
   const [isOnTransfer, setIsOnTransfer] = useState<boolean>(true);
 
@@ -189,7 +232,37 @@ export default () => {
     <div className="overflow-x-hidden overflow-y-auto absolute w-screen w-100 bg-[conic-gradient(at_right,_var(--tw-gradient-stops))] from-gray-100 to-gray-300">
       <div className="flex flex-row w-screen">
         <div className="w-3/5">
-          <Line data={data} options={options} redraw   />
+          {isLoading ? (
+            <Line data={data} options={options} redraw />
+          ) : (
+            <>
+              <div className="flex justify-center items-center h-96">
+                <button
+                  onClick={() => {
+                    alert("hola");
+                  }}
+                  className="z-20 w-16 h-16 text-white bg-inaoe rounded-full mx-auto bottom-10 right-10 flex items-center justify-center cursor-pointer"
+                  type="button"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#FFFFFF"
+                    stroke-width="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                  </svg>
+                </button>
+                <div className="animate-spin rounded-full h-32 w-32 border-t-2 absolute border-b-2 border-inaoe"></div>
+              </div>
+            </>
+          )}
         </div>
         <div className="w-2/5 ml-10">
           <InputFieldMos

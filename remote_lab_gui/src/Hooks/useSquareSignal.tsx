@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { set } from 'rsuite/esm/utils/dateUtils';
 
 export interface useSquareSignal {
     frequency: number;

@@ -6,8 +6,6 @@ import reportWebVitals from './reportWebVitals';
 import "./i18n";
 
 
-import "rsuite/dist/rsuite.min.css";
-
 import "tailwindcss/tailwind.css";
 
 import {
